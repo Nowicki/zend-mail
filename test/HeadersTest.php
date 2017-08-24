@@ -483,4 +483,27 @@ class HeadersTest extends TestCase
         $encodedValue = $to->getFieldValue(Header\HeaderInterface::FORMAT_ENCODED);
         $this->assertEquals('local-part@xn---umlaut-4wa.de', $encodedValue);
     }
+
+    public function test1()
+    {
+        $headers = Mail\Headers::fromString("Fake: foo\r\n \r\n bar");
+        $this->assertEquals(1, $headers->count());
+
+        $header = $headers->get('fake');
+        $this->assertInstanceOf('Zend\Mail\Header\GenericHeader', $header);
+        $this->assertEquals('Fake', $header->getFieldName());
+        $this->assertEquals('foo bar', $header->getFieldValue());
+    }
+
+    public function test2()
+    {
+        $this->expectException('Zend\Mail\Exception\RuntimeException');
+        Mail\Headers::fromString("Fake: foo bar\r\n \r\nFake2: baz");
+    }
+
+    public function test3()
+    {
+        $this->expectException('Zend\Mail\Exception\RuntimeException');
+        Mail\Headers::fromString(" \r\nFake: foo bar");
+    }
 }

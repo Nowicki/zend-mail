@@ -506,4 +506,10 @@ class HeadersTest extends TestCase
         $this->expectException('Zend\Mail\Exception\RuntimeException');
         Mail\Headers::fromString(" \r\nFake: foo bar");
     }
+
+    public function test4()
+    {
+        $this->expectException('Zend\Mail\Exception\RuntimeException');
+        Mail\Headers::fromString("Fake: foo bar\r\n ");
+    }
 }
